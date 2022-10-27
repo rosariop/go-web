@@ -27,7 +27,12 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		w.Write([]byte(jwt))
+		_, err = w.Write([]byte(jwt))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		w.WriteHeader(http.StatusOK)
 		return
 	}
