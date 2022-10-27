@@ -7,30 +7,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/rosariop/go-web/authentication"
 )
 
 type UserCredentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-}
-
-func generateJwt(username string, role string) (string, error) {
-	secret := []byte("mysecret")
-
-	claims := jwt.MapClaims{}
-	claims["exp"] = time.Now().Add(10 * time.Minute)
-	claims["authorized"] = true
-	claims["user"] = username
-	claims["roles"] = []string{role}
-	at := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	tokenString, err := at.SignedString(secret)
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
 }
 
 func authHandler(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +24,8 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if userCredentials.Username == "someUsername" && userCredentials.Password == "somePassword" {
-		jwt, err := generateJwt(userCredentials.Username, "admin")
+		exp := time.Now().Add(10 * time.Minute)
+		jwt, err := authentication.GenerateJwt(userCredentials.Username, "admin", exp)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
