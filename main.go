@@ -31,9 +31,7 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		returnString := "Bearer " + jwt
-
-		w.Write([]byte(returnString))
+		w.Write([]byte(jwt))
 		w.WriteHeader(http.StatusOK)
 		return
 	}

@@ -20,6 +20,7 @@ func GenerateJwt(username string, role string, exp time.Time) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	token := "Bearer " + tokenString
 
-	return tokenString, nil
+	return token, nil
 }
