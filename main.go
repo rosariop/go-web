@@ -47,11 +47,15 @@ func authHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		w.Write([]byte(jwt))
+
+		returnString := "Bearer " + jwt
+
+		w.Write([]byte(returnString))
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 
-	http.Error(w, err.Error(), http.StatusUnauthorized)
+	w.WriteHeader(http.StatusUnauthorized)
 }
 
 func main() {
