@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -14,8 +15,8 @@ func validate(bearer string) bool {
 
 	claims := jwt.MapClaims{}
 
-	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte("mysecret"), nil
+	_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_KEY")), nil
 	})
 
 	if err != nil {
@@ -23,9 +24,6 @@ func validate(bearer string) bool {
 		fmt.Println(err.Error())
 		return false
 	}
-	fmt.Println(token)
-
-	fmt.Println(tokenString)
 
 	return true
 }

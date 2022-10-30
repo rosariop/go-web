@@ -1,13 +1,14 @@
 package authentication
 
 import (
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
 func GenerateJwt(username string, role string, exp time.Time) (string, error) {
-	secret := []byte("mysecret")
+	secret := []byte(os.Getenv("JWT_KEY"))
 
 	claims := jwt.MapClaims{}
 

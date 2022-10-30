@@ -16,6 +16,7 @@ func main() {
 		panic("no stage given")
 	}
 
+	//if stage isn't test, assume it's set to production, therefore load os.GetEnv directly
 	if os.Args[3] == "test" {
 		godotenv.Load()
 	}
