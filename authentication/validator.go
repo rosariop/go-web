@@ -15,8 +15,6 @@ func validate(bearer string) bool {
 	claims := jwt.MapClaims{}
 
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		// since we only use the one private key to sign the tokens,
-		// we also only use its public counter part to verify
 		return []byte("mysecret"), nil
 	})
 
