@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-
 	http.HandleFunc("/authenticate", authentication.AuthHandler)
 
 	fmt.Println("Starting server on Port 8080")

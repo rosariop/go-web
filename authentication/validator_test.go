@@ -1,21 +1,26 @@
 package authentication
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
 
 func TestVerification(t *testing.T) {
 	// prepare
-	expected := true
-	bearer := "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOiIyMDE5LTAxLTAxVDAwOjAwOjAwWiIsInJvbGVzIjpbImFkbWluIl0sInVzZXIiOiJzb21lVXNlcm5hbWUifQ.L5p5s_28DxnyH08l9iGJFAKqMI2KeaI6fFuJe9K2tdY"
-	var now = func() time.Time { return time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC) }
+	bearer, err := GenerateJwt("someUsername", "admin", time.Now())
+	if err != nil {
+		fmt.Println("Error generating JWT")
+		t.FailNow()
+	}
 
 	// action
-	actual := validate(bearer, now())
+	actual := validate(bearer)
 
 	//assert
-	if actual != expected {
+
+	if !actual {
+		fmt.Println("")
 		t.FailNow()
 	}
 }
