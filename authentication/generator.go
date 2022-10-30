@@ -11,7 +11,7 @@ func GenerateJwt(username string, role string, exp time.Time) (string, error) {
 
 	claims := jwt.MapClaims{}
 
-	claims["exp"] = exp.Add(time.Minute * time.Duration(10))
+	claims["exp"] = jwt.NumericDate{Time: exp.Add(time.Minute * time.Duration(10))}
 	claims["authorized"] = true
 	claims["user"] = username
 	claims["roles"] = []string{role}
