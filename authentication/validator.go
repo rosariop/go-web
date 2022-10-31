@@ -11,6 +11,9 @@ import (
 
 func validate(bearer string) bool {
 	s := strings.Split(bearer, " ")
+	if len(s) != 2 {
+		return false
+	}
 	tokenString := s[1]
 
 	claims := jwt.MapClaims{}
