@@ -15,8 +15,11 @@ jobs:
       - name: Format Checker
         run: test -z "$(gofmt -l .)"
 
-      - name: upload to codecov
+      - name: Test Code
         run: go test -v -race -coverprofile="cov.out" -covermode=atomic ./...
+        
+      - name: Upload to CodeCov
+        uses: codecov/codecov-action@v3
         with:
           files: ./cov.out
           
