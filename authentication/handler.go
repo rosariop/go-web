@@ -38,3 +38,11 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusUnauthorized)
 }
+
+func ValidationHandler(w http.ResponseWriter, r *http.Request) {
+	var tokenString string
+	if !validate(tokenString) {
+		w.WriteHeader(http.StatusUnauthorized)
+	}
+	w.WriteHeader(http.StatusOK)
+}
