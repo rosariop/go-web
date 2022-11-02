@@ -68,5 +68,64 @@ func TestGenerateHandlerWithReturnToken(t *testing.T) {
 	if !isJWT {
 		t.FailNow()
 	}
+}
 
+func TestGenerateHandlerWithWrongUsername(t *testing.T) {
+
+	// mocking data
+	userdata := UserCredentials{Username: "username", Password: "somePassword"}
+	var byteBuffer bytes.Buffer
+	err := json.NewEncoder(&byteBuffer).Encode(userdata)
+	if err != nil {
+		fmt.Println("Failing due to bad encoding")
+		t.FailNow()
+	}
+
+	// prepares request
+	req, err := http.NewRequest(http.MethodGet, "/authenticate", &byteBuffer)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// prepares response recorder
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(AuthHandler)
+
+	// starts request
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusUnauthorized {
+		fmt.Printf("FAIL: Wrong status code: %d", rr.Code)
+		t.FailNow()
+	}
+}
+
+func TestGenerateHandlerWithWrongPassword(t *testing.T) {
+
+	// mocking data
+	userdata := UserCredentials{Username: "someUsername", Password: "password"}
+	var byteBuffer bytes.Buffer
+	err := json.NewEncoder(&byteBuffer).Encode(userdata)
+	if err != nil {
+		fmt.Println("Failing due to bad encoding")
+		t.FailNow()
+	}
+
+	// prepares request
+	req, err := http.NewRequest(http.MethodGet, "/authenticate", &byteBuffer)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// prepares response recorder
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(AuthHandler)
+
+	// starts request
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusUnauthorized {
+		fmt.Printf("FAIL: Wrong status code: %d", rr.Code)
+		t.FailNow()
+	}
 }
