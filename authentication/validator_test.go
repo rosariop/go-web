@@ -1,7 +1,11 @@
 package authentication
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 )
@@ -51,6 +55,42 @@ func TestVerificationExpiredToken(t *testing.T) {
 
 	if actual {
 		fmt.Println("")
+		t.FailNow()
+	}
+}
+
+type realClock struct{}
+
+var now = func() time.Time { return time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC) }
+
+func (realClock) Now() time.Time { return now() }
+
+func TestValidateOK(t *testing.T) {
+
+	// mocking data
+	userdata := UserCredentials{Username: "someUsername", Password: "password"}
+	var byteBuffer bytes.Buffer
+	err := json.NewEncoder(&byteBuffer).Encode(userdata)
+	if err != nil {
+		fmt.Println("Failing due to bad encoding")
+		t.FailNow()
+	}
+
+	// prepares request
+	req, err := http.NewRequest(http.MethodGet, "/validate", &byteBuffer)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// prepares response recorder
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(AuthHandler)
+
+	// starts request
+	handler.ServeHTTP(rr, req)
+
+	if rr.Code != http.StatusUnauthorized {
+		fmt.Printf("FAIL: Wrong status code: %d", rr.Code)
 		t.FailNow()
 	}
 }

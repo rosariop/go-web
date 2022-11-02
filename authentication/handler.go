@@ -40,7 +40,8 @@ func AuthHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ValidationHandler(w http.ResponseWriter, r *http.Request) {
-	var tokenString string
+	tokenString := r.Header.Get("Authorization")
+
 	if !validate(tokenString) {
 		w.WriteHeader(http.StatusUnauthorized)
 	}

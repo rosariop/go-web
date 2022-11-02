@@ -41,7 +41,7 @@ func TestGenerateHandlerWithReturnToken(t *testing.T) {
 	tokenPattern := "Bearer [A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$"
 
 	// prepares request
-	req, err := http.NewRequest(http.MethodGet, "/authenticate", &byteBuffer)
+	req, err := http.NewRequest(http.MethodPost, "/authenticate", &byteBuffer)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func TestGenerateHandlerWithWrongUsername(t *testing.T) {
 	}
 
 	// prepares request
-	req, err := http.NewRequest(http.MethodGet, "/authenticate", &byteBuffer)
+	req, err := http.NewRequest(http.MethodPost, "/authenticate", &byteBuffer)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -112,7 +112,7 @@ func TestGenerateHandlerWithWrongPassword(t *testing.T) {
 	}
 
 	// prepares request
-	req, err := http.NewRequest(http.MethodGet, "/authenticate", &byteBuffer)
+	req, err := http.NewRequest(http.MethodPost, "/authenticate", &byteBuffer)
 	if err != nil {
 		t.Fatal(err)
 	}
